@@ -1,6 +1,7 @@
 {
     "name": "Webwork Upgrade",
     "version": "1.0.0",
+<<<<<<< HEAD
     "icons": { 
         "16": "icon16.png",
         "48": "icon48.png",
@@ -26,5 +27,19 @@
     "browser_action": {
         "default_popup": "popup.html",
         "default_title": "Webwork for humans"
+=======
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+            "matches": [
+                "https://webwork.math.nau.edu/*"
+            ],
+            "js": ["content.js"]
+        }
+    ],
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_title": "settings"
+>>>>>>> 468fc7e... first commit
     }
 }

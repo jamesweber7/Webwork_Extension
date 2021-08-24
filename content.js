@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [...document.getElementsByClassName("mq-editable-field")].map(el => {
   
   el.addEventListener("input", function() {
@@ -92,3 +93,6 @@ for (let i = 0; i < correctElements.length; i++) {
 for (let i = 0; i < incorrectElements.length; i++) {
   incorrectElements[i].style = 'border-color: rgba(191, 84, 84, 0.8); outline: 0; box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 8px rgb(191 84 84 / 60%); color: inherit;';
 }
+=======
+console.log("running in here mf");
+>>>>>>> 468fc7e... first commit
