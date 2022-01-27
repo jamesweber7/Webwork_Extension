@@ -12,7 +12,7 @@
         {
             "matches": ["https://*/*"],
             "include_globs":  ["https://webwork.*/*", "https://webwork2.*/*"],
-            "js": ["content.js", "shortcuts.js", "zzzboringtaxstuff.js", "classtrack.js"]
+            "js": ["content.js", "shortcuts.js", "zzzboringtaxstuff.js", "classtrack.js", "LocalStorage.js"]
         },
         {
             "matches": ["https://*/*"],

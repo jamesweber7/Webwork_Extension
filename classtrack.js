@@ -1,10 +1,7 @@
 
 var className = getClassName();
 if (onClassPage()) {
-    chrome.storage.sync.get(['webwork_data'], (data) => {
-        if (!Object.keys(data).length) {
-            return appendAddToClasslistButton();
-        }
+    LocalStorage.get(data => {
         let classes = data.webwork_data.classes;
         let isInClasslist = false;
         for (let i = 0; i < classes.length && !isInClasslist; i++) {
@@ -18,16 +15,15 @@ function appendAddToClasslistButton() {
     let btn = document.createElement('button');
     btn.setAttribute('class', 'nav_button btn btn-primary');
     btn.innerText = 'Add ' + className + ' To Classlist';
-    btn.addEventListener('click', onclick);
-    function onclick () {
-      addClass();
-      btn.remove();
-    }
+    btn.addEventListener('click', () => {
+        addClass();
+        btn.remove();
+    });
     document.getElementById('page-title').append(btn);
 }
 
 function updateClass() {
-    chrome.storage.sync.get(['webwork_data'], (data) => {
+    LocalStorage.get( data => {
         let classes = data.webwork_data.classes;
         let index;
         for (let i = 0; i < classes.length && !index; i++) {
@@ -48,7 +44,7 @@ function updateClass() {
         classes.push(coolClass);
 
         data.webwork_data.classes = classes;
-        setWebworkData(data);
+        LocalStorage.setData(data);
     });
 }
 
@@ -77,19 +73,14 @@ function addClass() {
 }
 
 function saveClass(coolClass) {
-    chrome.storage.sync.get(['webwork_data'], (data) => {
+    LocalStorage.getData( data => {
         data.webwork_data.classes.push(coolClass);
-        setWebworkData(data);
+        LocalStorage.setData(data);
     });
 }
 
-function setWebworkData(data) {
-    console.log('SETTING DATA' + data);
-    chrome.storage.sync.set(data);
-}
-
 function printWebworkClasses() {
-    chrome.storage.sync.get(['webwork_classes'], (data) => {
+    LocalStorage.getData( data => {
         console.log(data);
     });
 }

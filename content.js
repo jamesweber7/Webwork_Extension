@@ -8,17 +8,15 @@
 readWebworkUrl();
 
 function readWebworkUrl() {
-  chrome.storage.sync.get(['webwork_data'], (data) => {
+  LocalStorage.getData( data => {
     let url = getBaseUrl(window.location.href);
-    console.log("DATA");
-    console.log(data);
     if (!Object.keys(data).length) {
       data = getDefaultData();
     }
     if (!data.webwork_data.webwork_home_link_set && !data.webwork_data.webwork_home_link.includes(url)) {
       data.webwork_data.webwork_home_link.push(url);
     }
-    chrome.storage.sync.set(data);
+    LocalStroage.setData(data);
   });
 }
 

@@ -1,27 +1,24 @@
-document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById("study-problem-button").addEventListener('click', onclick, false);
-  const openRandomProblemMessage = 'open_random_problem';
-  
-  function onclick () {
-    chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
-      chrome.tabs.sendMessage(tabs[0].id, openRandomProblemMessage);
-    });
-  }
-}, false)
+
+document.addEventListener('DOMContentLoaded', getDataOnload);
 
 document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById("study-problem-button").addEventListener('click', studyRandomProblem);
+});
+
+function getDataOnload() {
   let webworkUrl;
-  chrome.storage.sync.get(['webwork_data'], (data) => {
+  LocalStorage.getData(data => {
     if (data.webwork_data.webwork_home_link_set) {
       webworkUrl = data.webwork_data.webwork_home_link;
-      document.getElementById("webwork-btn").addEventListener('click', onclick, false);
+      document.getElementById("webwork-btn").addEventListener('click', openWebworkUrl);
     } else {
       hideWebworkBtn();
       appendSetWebworkLinkPopup(data.webwork_data.webwork_home_link);
     }
   });
-  function onclick () {
-    window.open(webworkUrl, '_blank');  
+  
+  function openWebworkUrl () {
+    openLink(webworkUrl);  
   }
 
   function appendSetWebworkLinkPopup(links) {
@@ -56,10 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
     if (link) {
       removePopup();
       webworkUrl = processUrl(link);
-      chrome.storage.sync.get(['webwork_data'], (data) => {
+      LocalStorage.getData( data => {
         data.webwork_data.webwork_home_link_set = true;
         data.webwork_data.webwork_home_link = webworkUrl;
-        chrome.storage.sync.set(data, function() {
+        LocalStorage.setData(data, () => {
           location.reload();
         });
       });
@@ -87,15 +84,15 @@ document.addEventListener('DOMContentLoaded', function () {
     linkPopup.remove();
   }
 
-}, false)
+}
 
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', setupInfoBtn);
+function setupInfoBtn() {
   document.getElementById("info-btn").addEventListener('click', toggleInfoBox, false);
   var infoIsOpen = false;
   var infoBox = document.getElementById('info-box');
   var dataList = document.getElementById('data-list');
-  var infoList = document.getElementById('info-list');
   function toggleInfoBox () {
     if (infoIsOpen) {
       infoBox.style.display = 'none';
@@ -119,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function loadDataList() {
     dataList.innerText = 'loading data...';
-    chrome.storage.sync.get(['webwork_data'], (data) => {
+    LocalStorage.getData((data) => {
       dataList.innerText = 'Data';
       let classDataBox = getClassList(data.webwork_data.classes);
       let webworkLinkDataBox = getWebworkLinkItem(data.webwork_data);
@@ -171,29 +168,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let btn = document.createElement('button');
     btn.innerText = 'Reset Data';
     btn.className = 'webwork-btn auto-btn';
-    btn.addEventListener('click', resetData);
-    return btn;
-    function resetData() {
-      chrome.storage.sync.set(getDefaultData(), function() {
+    btn.addEventListener('click', () => {
+      LocalStorage.initializeData(() => {
         location.reload();
-      });
-    }
-    function getDefaultData() {
-      return {
-        webwork_data : {
-          classes : [],
-          webwork_home_link : [],
-          webwork_home_link_set : false
-        }
-      };
-    }
+      })
+    });
+    return btn;
   }
 
-  function openLink(link) {
-    window.open(link, '_blank');  
-  }
-
-}, false)
+}
 
 
 
@@ -203,7 +186,7 @@ function addToDoc(msg) {
 
 window.addEventListener('DOMContentLoaded', function () {
 
-  chrome.storage.sync.get(['webwork_data'], (data) => {
+  LocalStorage.getData( data => {
       parseClasses(data.webwork_data.classes);
   });
   
@@ -288,4 +271,18 @@ window.addEventListener('DOMContentLoaded', function () {
       dueDate.getFullYear() == today.getFullYear();
   }
 
-}, false)
+});
+
+function hasData(data) {
+  return !!Object.keys(data).length;
+}
+
+function studyRandomProblem () {
+  chrome.tabs.query({currentWindow: true, active: true}, function (tabs) {
+    chrome.tabs.sendMessage(tabs[0].id, 'open_random_problem');
+  });
+}
+
+function openLink(link) {
+  window.open(link, '_blank');  
+}
