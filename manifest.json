@@ -1,25 +1,34 @@
 {
-    "name": "Webwork++",
-    "version": "1.0.2",
+    "name": "Webwork Upgrade",
+    "version": "1.0.0",
     "icons": { 
         "16": "icon16.png",
         "48": "icon48.png",
        "128": "icon128.png"
     },
-    "description": "Use WeBWorK Bonus Features",
-    "manifest_version": 2,
-    "content_scripts": [
-        {
-            "matches": ["https://*/*"],
-            "include_globs":  ["https://webwork.*/*", "https://webwork2.*/*"],
-            "js": ["content.js", "shortcuts.js", "zzzboringtaxstuff.js", "classtrack.js", "studyproblem.js", "popup.js"]
-        }
-    ],
     "permissions": [
         "storage"
     ],
-    "browser_action": {
-        "default_popup": "popup.html",
-        "default_title": "Helpful features for using WeBWorK"
-    }
+    "description": "For speeding up Workflow in WebWork.",
+    "manifest_version": 2,
+    "background": { 
+        "scripts": ["background.js"]
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://webwork.math.nau.edu/*/*/*/*",
+                "https://webwork.math.asu.edu/*/set*"
+            ],
+            "js": ["content.js", "shortcuts.js", "zzzboringtaxstuff.js"]
+        },
+        {
+            "matches": [
+                "https://webwork.math.nau.edu/*",
+                "https://webwork.math.asu.edu/*"
+            ],
+            "js": ["studyproblem.js", "selectsets.js"]
+        }
+    ],
+    "browser_action": {}
 }

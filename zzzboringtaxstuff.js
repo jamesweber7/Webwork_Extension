@@ -1,22 +1,11 @@
-
 let specialWordsPresent = 0;
 
 function doNothing(answer) {
-  switch (answer) {
-    case 'hello' :
-      alert("heyo 🤙");
-      break;
-    case 'help' :
-      commandMenu();
-      break;
-  }
-  if (containsNewlyTypedSpecialWord(answer)) {
+  if (answer=="hi travis") {
+    alert("heyo 🤙");
+  } else if (containsNewlyTypedSpecialWord(answer)) {
     alert("Watch your profanity");
   }
-}
-
-function commandMenu() {
-  alert('COMMANDS :\n shift + b : back \n shift + n : next \n enter with new solution: submit \n enter without new solution: next problem');
 }
 
 function containsNewlyTypedSpecialWord(str) {
